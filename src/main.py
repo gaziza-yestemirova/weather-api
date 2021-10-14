@@ -50,18 +50,19 @@ class WeatherAPI:
     def get_forecast_data(self, woeid: int, date: str) -> Dict:
         response = requests.get(f'{self.URL}{woeid}/{date}/')
         response.raise_for_status()
-        return response.json()[0]
+        return response.json()
 
     def get_tomorrows_date(self):
         return (datetime.today() + timedelta(days=1)).strftime('%Y/%m/%d')
 
     def check_for_rain(self, woeid) -> str:
         date: str = self.get_tomorrows_date()
-        data = self.get_forecast_data(woeid, date)
+        data: Dict = self.get_forecast_data(woeid, date)
+        latest_forecast: Dict = data[0]
         message: str = f'It won\'t rain tomorrow in {self.chosen_city}.'
-        if data['weather_state_abbr'] in self.RAIN_STATES:
-            message: str = f'It will rain tomorrow in {self.chosen_city},' \
-                           f' {data["predictability"]}% chance.'
+        if latest_forecast['weather_state_abbr'] in self.RAIN_STATES:
+            message = f'It will rain tomorrow in {self.chosen_city},' \
+                           f' {latest_forecast["predictability"]}% chance.'
         return message
 
 

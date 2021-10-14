@@ -1,0 +1,4 @@
+PyInquirer==1.0.3
+requests==2.25.1
+pytest==6.2.5
+pytest-flake8==1.0.7
